@@ -1,5 +1,3 @@
-
-
 import React, { Component } from "react";
 import NavBar from "./components/NavBar";
 import { Routes, Route } from "react-router-dom";

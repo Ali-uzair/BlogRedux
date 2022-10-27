@@ -1,46 +1,51 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./Show.css";
 import { getPost } from "../api/PostsApi";
+import { useDispatch } from "react-redux";
+import { actionCreators } from "../state/index";
+import { useSelector } from "react-redux";
 
-const Show = (props) => {
-  const [articles, setArticles] = useState([]);
+const Show = () => {
+  const dispatch = useDispatch();
+  const articles = useSelector((state) => state.posts.post);
 
   const { id } = useParams();
   useEffect(() => {
-    getPost(id).then((res) => setArticles(res));
-  }, [id]);
+    getPost(id).then((res) => dispatch(actionCreators.setdata(res)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="container">
-      {articles.length === 0 ? (
+      {articles?.length === 0 ? (
         <div className="divStyle">no data found</div>
       ) : (
         <div>
           <div className="titleDiv">
             <div className="innerDiv">
-              <p className="discription">{articles.title}</p>
+              <p className="discription">{articles?.title}</p>
 
               <p>
                 <strong>Description: </strong>
-                {articles.description}
+                {articles?.description}
               </p>
 
               <p>
                 <strong>Published at: </strong>
-                {articles.published}
+                {articles?.published}
               </p>
 
               <p>
                 <strong>Created by: </strong>
-                {articles.name}
+                {articles?.name}
               </p>
             </div>
           </div>
           <br />
           <div
             className="postDataDiv"
-            dangerouslySetInnerHTML={{ __html: articles.content }}
+            dangerouslySetInnerHTML={{ __html: articles?.content }}
           />
           <hr className="divStyle" />
 
@@ -49,7 +54,7 @@ const Show = (props) => {
               <div className="row">
                 <div className="col-md-6 comtDataDiv">
                   <h2 className="subtitle is-5"> Comments</h2>
-                  {articles.comments.map((comment) => {
+                  {articles?.comments.map((comment) => {
                     return (
                       <div key={comment.commentid}>
                         <strong style={{ color: "blue" }}>
@@ -63,7 +68,7 @@ const Show = (props) => {
                 </div>
                 <div className="col-md-6 comtDataDiv">
                   <h3 className="subtitle is-3">Suggestions</h3>
-                  {articles.suggestions.map((suggest) => {
+                  {articles?.suggestions.map((suggest) => {
                     return (
                       <div key={suggest.suggestid}>
                         <strong style={{ color: "blue" }}>
